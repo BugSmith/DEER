@@ -1,2 +1,4 @@
 # DEER
-This is the repository of DEER, a Dynamic Early Exit in Reasoning method for Large Reasoning Language Models.
+This is the repository of our paper: [Dynamic Early Exit in Reasoning Models](https://arxiv.org/abs/2504.15895).
+
+The code is coming soon!​​

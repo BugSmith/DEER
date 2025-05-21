@@ -1,94 +1,106 @@
 # DEER 🦌: Dynamic Early Exit in Reasoning Models
+[![arXiv](https://img.shields.io/badge/arXiv-2504.15895-b31b1b.svg)](https://arxiv.org/abs/2504.15895)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-orange)](https://huggingface.co/)
+[![vLLM](https://img.shields.io/badge/vLLM-Efficient%20LLM%20Inference-green)](https://github.com/vllm-project/vllm)
+
 This is the repository of our paper: [Dynamic Early Exit in Reasoning Models](https://arxiv.org/abs/2504.15895).
+
 
 <p align="center"> <img src="./images/deer.png" style="width: 85%;" id="title-icon">       </p>
 
+**DEER** monitors model behavior at potential reasoning transition points and dynamically terminates the next reasoning chain’s generation when the model exhibits high confidence in a trial answer. It is consistently effective on 11 cutting-edge reasoning LLMs of varying series and sizes, reducing the length of CoT sequences by an average of **19.1% - 80.1%** while improving accuracy by **0.3% - 5.0%**.
 
-## Updates
-- [2025/05/20] We've released the DEER code on mathematical reasoning tasks implemented based on **HuggingFace Transformers** and **vLLM**.
+---
 
-## Overview
+## 🔥 **Latest Updates**
+- **[2025/05/20]** Released DEER code for mathematical reasoning tasks (HuggingFace & vLLM).
+- **[Coming Soon]** DEER for code generation tasks & Branch-Parallel Decoding Acceleration.
 
-DEER monitors model behavior at potential reasoning transition points and dynamically terminates the next reasoning chain’s generation when the model exhibits high confidence in a trial answer. It is consistently effective on 11 cutting-edge reasoning LLMs of varying series and sizes, reducing the length of CoT sequences by an average of 19.1% to 80.1% while improving accuracy by 0.3% to 5.0%.
+---
 
-## Inference
 
-We have implemented DEER based on both Hugging Face Transformers and vLLM. 
+## 🚀 Quick Start
+### 1. Installation
+```bash
+git clone https://github.com/yourusername/DEER.git
+cd DEER
+pip install -r requirements.txt
+```
+
+### 2. DEER on vLLM (Recommended)
 Considering efficiency, we recommend reproducing the results using the code based on the **vLLM** framework.
 
-### vLLM
-
-#### Most LRLMs
-
-Execute inference by running the script *./bashes/bash-vllm-deer.sh*.
-
-Provide the following arguments.
+#### For Most Reasoning Models
 ```
-python ../vllm-deer.py \
-    --model_name_or_path "" \
-    --dataset_dir "" \
-    --output_path "" \
-    --dataset "" \
-    --threshold  \
-    --max_generated_tokens  \
-    --think_ratio  \
-    --batch_size  \
-    --dtype  \
-    --gpu-memory-utilization  
+CUDA_VISIBLE_DEVICES=1 python ../vllm-deer.py \
+    --model_name_or_path "./DeepSeek-R1-Distill-Qwen-14B" \
+    --dataset_dir "./data/" \
+    --output_path "./outputs" \
+    --dataset "math" \
+    --threshold 0.95 \
+    --max_generated_tokens 16000 \
+    --think_ratio 0.9 \
+    --batch_size 2000 \
+    --dtype bfloat16 \
+    --gpu-memory-utilization 0.9 \ 
+```
+or run:
+```bash
+bash ./bashes/bash-vllm-deer.sh.
 ```
 
 
-#### Qwen3
+#### For Qwen3 Models
 
-In our experiments, we found that Qwen3-series models tend to be over-confident in confidence prediction, so we made some modifications to its implementation. For inference with Qwen3 models, please run the script *./bashes/bash-vllm-deer-qwen3.sh*.
-
-Provide the following arguments.
 ```
-python ../vllm-deer-qwen3.py \
-    --model_name_or_path "" \
-    --dataset_dir "" \
-    --output_path "" \
-    --dataset "" \
-    --threshold  \
-    --max_generated_tokens  \
-    --think_ratio  \
-    --batch_size  \
-    --dtype  \
-    --gpu-memory-utilization  
+CUDA_VISIBLE_DEVICES=1 python ../vllm-deer-qwen3.py \
+    --model_name_or_path "./Qwen3-4B" \
+    --dataset_dir "./data/" \
+    --output_path "./outputs" \
+    --dataset "math" \
+    --threshold 0.95 \
+    --max_generated_tokens 16000 \
+    --think_ratio 0.9 \
+    --batch_size 2000 \
+    --dtype bfloat16 \
+    --gpu-memory-utilization 0.9 \
+```
+or run:
+```bash
+bash ./bashes/bash-vllm-deer-qwen3.sh.
+```
+In our experiments, we found that Qwen3-series models tend to be over-confident in confidence prediction, so we made some modifications to its implementation. 
+
+### 3. DEER on Transformers
+
+For inference using HuggingFace Transformers (without vLLM), run:
+```bash
+bash ./bashes/bash-vanilla-deer.sh
 ```
 
-### transformers
 
-Execute inference by running the script *./bashes/bash-vanilla-deer.sh*.
-
-
-## Evaluation
+## 📊 Evaluation
 
 DEER currently supports evaluation on 7 reasoning benchmarks. The rule-based evaluation for these benchmarks is based on the code implementation from the project [LIMO](https://github.com/GAIR-NLP/LIMO/tree/main).
 
-Execute the evaluation by running the script *./bashes/bash-check-correct.sh*.
 
-Provide the following arguments to run the answer checking script *bash-check-correct.sh*.
 ```
 python ../check.py \
-    --model_name_or_path "" \
-    --data_name "" \
-    --generation_path ""
+    --model_name_or_path "./DeepSeek-R1-Distill-Qwen-14B" \
+    --data_name "math" \
+    --generation_path "your_output.jsonl" \
+```
+or run
+```bash
+bash ./bashes/bash-check-correct.sh
 ```
 
-## TODO
-
-- We will release the DEER implementation for code generation tasks.
-- We will release the DEER improved with Branch-Parallel Decoding Acceleration.
 
 
-
-## License
-
-This project is licensed under the MIT License.
-
-## Citation
-
+## 📜 Citation
+If you use DEER in your research, please cite our paper:
 ```bibtex
 @misc{yang2025dynamicearlyexitreasoning,
       title={Dynamic Early Exit in Reasoning Models}, 
@@ -100,7 +112,7 @@ This project is licensed under the MIT License.
       url={https://arxiv.org/abs/2504.15895}, 
 }
 ```
-## Discussion
+## 💬 Community
 
-Wechat Discussion Group:
+Join our WeChat group for discussions:
 <p align="center"> <img src="./images/WechatIMG.jpg" style="width: 85%;" id="title-icon">       </p>

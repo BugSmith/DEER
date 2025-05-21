@@ -50,7 +50,7 @@ CUDA_VISIBLE_DEVICES=1 python ../vllm-deer.py \
     --dataset "math" \
     --threshold 0.95 \
     --max_generated_tokens 16000 \
-    --think_ratio 0.9 \
+    --think_ratio 0.7 \
     --batch_size 2000 \
     --dtype bfloat16 \
     --gpu-memory-utilization 0.9 \ 
@@ -71,7 +71,7 @@ CUDA_VISIBLE_DEVICES=1 python ../vllm-deer-qwen3.py \
     --dataset "math" \
     --threshold 0.95 \
     --max_generated_tokens 16000 \
-    --think_ratio 0.9 \
+    --think_ratio 0.7 \
     --batch_size 2000 \
     --dtype bfloat16 \
     --gpu-memory-utilization 0.9 \

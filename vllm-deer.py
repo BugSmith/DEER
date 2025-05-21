@@ -164,7 +164,7 @@ def parse_args():
     parser.add_argument("--points", type=int, default=1) # 1: 'Wait' as thinking transition point. 0: 'Alternatively' as thinking transition point. 
     parser.add_argument("--bf", type=int, default=1) # answer forcing at end of sequence
     parser.add_argument("--max_judge_steps", type=int, default=10) # Limit the maximum number of answer attempts to save time cost.
-    parser.add_argument('--policy', type=str, default="avg2") # Strategy for Calculating Answer Confidence
+    parser.add_argument('--policy', type=str, default="avg1") # Strategy for Calculating Answer Confidence
 
     parser.add_argument('--threshold', type=float, default=0.95) # The answer confidence threshold used to determine early exit.
     parser.add_argument('--max_generated_tokens', '--max-len', type=int, default=16384, dest="max_len") # total token budget

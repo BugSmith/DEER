@@ -83,6 +83,8 @@ or run:
 bash ./bashes/bash-vllm-deer-qwen3.sh.
 ```
 In our experiments, we found that Qwen3-series models tend to be over-confident in confidence prediction, so we made some modifications to its implementation. 
+- The calculation of answer confidence was changed from arithmetic mean to geometric mean.
+- An additional condition must be satisfied for early exit: the model must generate <\/think> after the trial answer.
 
 ### 3. DEER on Transformers
 

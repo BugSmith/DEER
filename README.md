@@ -22,22 +22,10 @@ This is the repository of our paper: [Dynamic Early Exit in Reasoning Models](ht
 
 ## 🎯 Key Results
 
+<p align="center"> <img src="./images/deer-res.png" style="width: 85%;" id="title-icon">       </p>
 
 
-| Method                           | GSM8K       | MATH-500    | AMC23       | AIME24      | GPQA-D      | Overall     |
-|----------------------------------|-------------|-------------|-------------|-------------|-------------|-------------|
-|                                  | Acc↑ Tok↓ CR↓ | Acc↑ Tok↓ CR↓ | Acc↑ Tok↓ CR↓ | Acc↑ Tok↓ CR↓ | Acc↑ Tok↓ CR↓ | Acc↑ CR↓  |
-| DeepSeek-R1-Distill-Qwen-7B      |             |             |             |             |             |             |
-| Vanilla                          | 89.6 1,484 100% | 87.4 3,858 100% | 78.8 6,792 100% | 41.7 13,765 100% | 23.7 10,247 100% | 64.2 100% |
-| DEER                             | 90.6 917 61.8% | 89.8 2,143 55.5% | 85.0 4,451 65.5% | 49.2 9,839 71.5% | 31.3 5,469 53.4% | **69.2** **61.5%** |
-| Qwen3-14B                        |             |             |             |             |             |             |
-| Vanilla                          | 95.1 2,047 100% | 93.8 4,508 100% | 95.0 7,139 100% | 70.0 10,859 100% | 60.1 7,339 100% | 82.8 100% |
-| DEER                             | 95.3 840 41.0% | 94.0 3,074 68.2% | 95.0 4,763 66.7% | 76.7 7,619 70.2% | 57.6 2,898 39.5% | **83.7** **57.1%** |
-| QwQ-32B                          |             |             |             |             |             |             |
-| Vanilla                          | 96.7 1,427 100% | 93.8 4,508 100% | 92.5 6,792 100% | 66.7 10,821 100% | 63.1 7,320 100% | **82.6** 100% |
-| DEER                             | 96.3 977 68.5% | 94.6 3,316 73.6% | 95.0 5,782 85.1% | 70.0 10,097 93.3% | 64.1 6,163 84.2% | **84.0** **80.9%** |
-
-Results on 3 SoTA reasoning models. "Acc" denotes accuracy, "Tok" denotes token count, and "CR" denotes compression rate. 
+Results on 3 SoTA reasoning models with 16k token budgets. "Acc" denotes accuracy, "Tok" denotes token count, and "CR" denotes compression rate.
 
 ---
 

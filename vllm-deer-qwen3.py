@@ -165,7 +165,7 @@ def parse_args():
     parser.add_argument("--no_thinking", type=int, default=0) # Calculate the answer confidence at the very beginning of the reasoning process and attempt to exit early.
     parser.add_argument("--rep", type=int, default=0) # Exit early when repetition occurs, but it remains to be implemented. (TODO)
     parser.add_argument("--points", type=int, default=1) # 1: 'Wait' as thinking transition point. 0: 'Alternatively' as thinking transition point. 
-    parser.add_argument("--bf", type=int, default=1) # answer forcing at end of sequence
+    parser.add_argument("--af", type=int, default=0) # answer forcing at end of sequence
     parser.add_argument("--max_judge_steps", type=int, default=10) # Limit the maximum number of answer attempts to save time cost.
     parser.add_argument('--policy', type=str, default="avg2") # Strategy for Calculating Answer Confidence
 
@@ -655,7 +655,7 @@ def main():
 
                 elif step_type == 'answer':
                     state['generated_answer_history'] += (generated_text)
-                    if last_token_id != tokenizer.eos_token_id and args.bf == 1:
+                    if last_token_id != tokenizer.eos_token_id and args.af == 1:
                         state['state'] = 'answer_forcing'
                     else:
                         state['current_full_sequence'] = state['formatted_prompt'] + state['generated_thinking_history'] + state['generated_answer_history']

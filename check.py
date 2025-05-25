@@ -91,7 +91,7 @@ def read_jsonl(file_path):
 
 
 
-tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
 def infer(args):
     examples = load_data(args.data_name, args.split, args.data_dir)
@@ -157,8 +157,6 @@ def infer(args):
         response_length.append(len(data['generated_responses'][0].split()))
         tokens_response_len = len(tokenizer(data['generated_responses'][0])['input_ids'])
         token_num.append(tokens_response_len)
-        wait_num.append(count_wait_occurrences_lower(data['generated_responses'][0]))
-        alt_num.append(count_alt_occurrences_lower(data['generated_responses'][0]))
         
 
     avg_response_length = sum(response_length) / test_num
@@ -170,5 +168,4 @@ def infer(args):
 
 if __name__ == "__main__":
     args = parse_args()
-    set_seed(args.seed)
     infer(args)

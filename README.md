@@ -21,11 +21,15 @@ This is the repository of our paper: [Dynamic Early Exit in Reasoning Models](ht
 ---
 
 ## 🎯 Key Results
+Results on 11 reasoning models with 16k token budgets. "Acc" denotes accuracy, "Tok" denotes token count, and "CR" denotes compression rate.
+<p align="center"> <img src="./images/deer-main.png" style="width: 90%;" id="title-icon">       </p>
 
-<p align="center"> <img src="./images/deer-res.png" style="width: 85%;" id="title-icon">       </p>
 
+Experimental results presented in bar charts.
 
-Results on 3 SoTA reasoning models with 16k token budgets. "Acc" denotes accuracy, "Tok" denotes token count, and "CR" denotes compression rate.
+<p align="center"> <img src="./images/deer-ds.png" style="width: 90%;" id="title-icon">       </p>
+
+<p align="center"> <img src="./images/deer-qwen3.png" style="width: 90%;" id="title-icon">       </p>
 
 ---
 

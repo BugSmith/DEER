@@ -132,4 +132,4 @@ If you use DEER in your research, please cite our paper:
 ## 💬 Community
 
 Join our WeChat group for discussions:
-<p align="center"> <img src="./images/WechatIMG.jpg" style="width: 85%;" id="title-icon">       </p>
+<p align="center"> <img src="./images/WechatIMG.jpeg" style="width: 85%;" id="title-icon">       </p>

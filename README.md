@@ -119,14 +119,11 @@ bash ./bashes/bash-check-correct.sh
 ## 📜 Citation
 If you use DEER in your research, please cite our paper:
 ```bibtex
-@misc{yang2025dynamicearlyexitreasoning,
-      title={Dynamic Early Exit in Reasoning Models}, 
-      author={Chenxu Yang and Qingyi Si and Yongjie Duan and Zheliang Zhu and Chenyu Zhu and Qiaowei Li and Zheng Lin and Li Cao and Weiping Wang},
-      year={2025},
-      eprint={2504.15895},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2504.15895}, 
+@article{yang2025dynamic,
+  title={Dynamic Early Exit in Reasoning Models},
+  author={Yang, Chenxu and Si, Qingyi and Duan, Yongjie and Zhu, Zheliang and Zhu, Chenyu and Lin, Zheng and Cao, Li and Wang, Weiping},
+  journal={arXiv preprint arXiv:2504.15895},
+  year={2025}
 }
 ```
 ## 💬 Community

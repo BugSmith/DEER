@@ -13,7 +13,7 @@ from typing import Any, Dict, List
 from nltk import ngrams
 from collections import Counter
 
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoConfig
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
 import pdb
@@ -177,13 +177,68 @@ def parse_args():
     
     # Hardcoded 20
     parser.add_argument('--prob_check_max_tokens', type=int, default=20, help="Max tokens for probability check phase") # Max tokens for answer inducing
-    
+
     args = parser.parse_args()
     return args
 
+def resolve_context_window(args):
+    """Determine context window respecting both user input and model config."""
+    user_requested_context = any(flag in sys.argv for flag in ("--max-model-len", "--model-context-len"))
+    derived_max_model_len = None
+
+    try:
+        config = AutoConfig.from_pretrained(
+            args.model_name_or_path,
+            trust_remote_code=args.trust_remote_code
+        )
+        for attr in (
+            "max_position_embeddings",
+            "max_sequence_length",
+            "n_positions",
+            "max_seq_len",
+            "model_max_length"
+        ):
+            value = getattr(config, attr, None)
+            if isinstance(value, int) and value > 0:
+                derived_max_model_len = value
+                break
+    except Exception as config_error:
+        print(f"Warning: Unable to load model config to infer max context length: {config_error}")
+
+    if derived_max_model_len is not None:
+        if args.max_len > derived_max_model_len:
+            print(
+                f"Warning: Requested max_generated_tokens {args.max_len} exceeds model limit "
+                f"{derived_max_model_len}. Clamping to {derived_max_model_len}."
+            )
+            args.max_len = derived_max_model_len
+        if user_requested_context:
+            if args.model_context_len > derived_max_model_len:
+                print(
+                    f"Warning: Requested model context length {args.model_context_len} exceeds model limit "
+                    f"{derived_max_model_len}. Using {derived_max_model_len}."
+                )
+            args.model_context_len = min(max(args.model_context_len, args.max_len), derived_max_model_len)
+        else:
+            buffer_tokens = min(8000, max(0, derived_max_model_len - args.max_len))
+            args.model_context_len = min(args.max_len + buffer_tokens, derived_max_model_len)
+    else:
+        if user_requested_context:
+            if args.model_context_len < args.max_len:
+                print(
+                    f"Warning: Requested model context length {args.model_context_len} is smaller than "
+                    f"max_generated_tokens {args.max_len}. Using {args.max_len}."
+                )
+            args.model_context_len = max(args.model_context_len, args.max_len)
+        else:
+            buffer_tokens = max(2000, int(0.2 * args.max_len)) if args.max_len > 0 else 0
+            args.model_context_len = args.max_len + buffer_tokens
+
+    return derived_max_model_len
+
 def main():
     args = parse_args()
-    args.model_context_len = args.max_len + 8000
+    derived_max_model_len = resolve_context_window(args)
     print(f"Using vLLM LLM object for direct inference (batch processing)")
     print(f"Model path: {args.model_name_or_path}")
     print(f"Dataset: {args.dataset}")
@@ -193,6 +248,10 @@ def main():
     print(f"Batch size: {args.batch_size}")
     print(f"Max tokens for probability check phase: {args.prob_check_max_tokens}")
 
+    if derived_max_model_len is not None:
+        print(f"Model reported max context length: {derived_max_model_len}")
+    print(f"Resolved context window for vLLM: {args.model_context_len}")
+
     print("\nInitializing vLLM LLM engine...")
     available_gpus = os.environ['CUDA_VISIBLE_DEVICES'].split(',')
     try:
@@ -200,7 +259,7 @@ def main():
             model=args.model_name_or_path,
             tensor_parallel_size=len(available_gpus),
             dtype=args.dtype,
-            max_model_len=args.max_len + 8000,
+            max_model_len=args.model_context_len,
             gpu_memory_utilization=args.gpu_memory_utilization,
             trust_remote_code=True, 
         )
